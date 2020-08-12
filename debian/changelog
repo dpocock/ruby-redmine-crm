@@ -1,5 +1,5 @@
-ruby-redmine-crm (0.0.34-1) UNRELEASED; urgency=medium
+ruby-redmine-crm (0.0.54-1) UNRELEASED; urgency=medium
 
   * Initial release (Closes: #nnnn)
 
- -- Daniel Pocock <daniel@trendhosting.net>  Sun, 28 Jan 2018 10:56:45 +0000
+ -- Daniel Pocock <daniel@pocock.pro>  Wed, 12 Aug 2020 15:28:11 +0200
