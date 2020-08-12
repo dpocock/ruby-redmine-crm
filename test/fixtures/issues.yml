@@ -14,7 +14,7 @@ third_issue:
   subject: Issue 3 subject
   description: Third issue
   user: sam
-  author: sam
+  author: homer
   project: second_project
 fourth_issue:
   subject: Issue 4 subject

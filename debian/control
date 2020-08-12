@@ -2,22 +2,27 @@ Source: ruby-redmine-crm
 Section: ruby
 Priority: optional
 Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
-Build-Depends: debhelper (>= 9~),
+Build-Depends: debhelper (>= 11~),
                gem2deb,
                rake,
-               ruby-liquid (<< 2.6.4)
-Standards-Version: 3.9.8
+               ruby-liquid (<< 2.6.4),
+               ruby-rails,
+               ruby-zip
+Standards-Version: 4.3.0
 Vcs-Git: https://github.com/dpocock/ruby-redmine-crm
 Vcs-Browser: https://github.com/dpocock/ruby-redmine-crm
 Homepage: https://rubygems.org/gems/redmine_crm/
 Testsuite: autopkgtest-pkg-ruby
 XS-Ruby-Versions: all
+Rules-Requires-Root: no
 
 Package: ruby-redmine-crm
 Architecture: all
 XB-Ruby-Versions: ${ruby:Versions}
 Depends: ruby | ruby-interpreter,
          ruby-liquid (<< 2.6.4),
+         ruby-rails,
+         ruby-zip,
          ${misc:Depends},
          ${shlibs:Depends}
 Description: Common libraries for RedmineUP plugins for Redmine

@@ -6,11 +6,13 @@ class LiquidRender
     @objects_hash = [
       {'name' => 'one', "value" => 10},
       {'name' => 'two', "value" => 5},
+      {'name' => 'blank', "value" => nil},
       {'name' => 'three', "value" => 6}
     ]
     @registers = {}
     @assigns = {}
     @assigns['objects_arr'] = @objects_hash
+    @assigns['issues'] = RedmineCrm::Liquid::IssuesDrop.new(Issue.all)
     @assigns['now'] = Time.now
     @assigns['today'] = Date.today.strftime(date_format)
     drops.each do |key, drop|

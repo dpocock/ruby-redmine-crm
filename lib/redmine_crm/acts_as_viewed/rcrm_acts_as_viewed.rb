@@ -87,8 +87,8 @@ module RedmineCrm
           unless Object.const_defined?(viewing_class)
             Object.class_eval <<-EOV
               class #{viewing_class} < ActiveRecord::Base
-                belongs_to :viewed, :polymorphic => true
-                belongs_to :viewer, :class_name => #{viewer_class}, :foreign_key => :viewer_id
+                belongs_to :viewed, polymorphic: true
+                belongs_to :viewer, class_name: '#{viewer_class}', foreign_key: :viewer_id
               end
             EOV
           end
@@ -104,8 +104,8 @@ module RedmineCrm
           self.acts_as_viewed_options = { :viewing_class => viewing_class,
                                           :viewer_class => viewer_class }
           class_eval do
-            has_many :viewings, :as => :viewed, :dependent => :delete_all, :class_name => viewing_class.to_s
-            has_many(:viewers, :through => :viewings, :class_name => viewer_class.to_s)
+            has_many :viewings, as: :viewed, dependent: :delete_all, class_name: viewing_class.to_s
+            has_many :viewers, through: :viewings, class_name: viewer_class.to_s
 
             before_create :init_viewing_fields
           end
@@ -113,9 +113,9 @@ module RedmineCrm
           # Add to the User (or whatever the viewer is) a has_many viewings
           viewer_as_class = viewer_class.constantize
           return if viewer_as_class.instance_methods.include?('find_in_viewings')
-          viewer_as_class.class_eval <<-EOS
-            has_many :viewings, :foreign_key => :viewer_id, :class_name => #{viewing_class.to_s}
-          EOS
+          viewer_as_class.class_eval do
+            has_many :viewings, foreign_key: :viewer_id, class_name: viewing_class.to_s, dependent: :delete_all
+          end
         end
       end
 
@@ -146,7 +146,6 @@ module RedmineCrm
             target.total_views = ((target.total_views || 0) + 1)
             target.record_timestamps = false
             target.save(:validate => false, :touch => false)
-            # target.save_without_validation
           end
         end
 

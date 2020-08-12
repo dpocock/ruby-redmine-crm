@@ -18,6 +18,13 @@ module RedmineCrm
 
     def test_where_filter
       assert_match '{"name"=>"two", "value"=>5}', @liquid_render.render("{{ objects_arr | where: 'name', 'two' }}")
+      assert_match '{"name"=>"one", "value"=>10}', @liquid_render.render("{{ objects_arr | where: 'value', 6, '>' }}")
+      assert_match '{"name"=>"one", "value"=>10}', @liquid_render.render("{{ objects_arr | where: 'name', 'on', 'match' }}")
+      assert_match '3', @liquid_render.render("{{ objects_arr | where: 'value', '', 'any' | size }}")
+      assert_match '1', @liquid_render.render("{{ objects_arr | where: 'value', '', 'none' | size }}")
+      assert_match '2', @liquid_render.render("{{ issues.all | where: 'author.name', 'Jonathan', '==' | size }}")
+      assert_match '1', @liquid_render.render("{{ issues.all | where: 'author.language', 'CH', '==' | size }}")
+      assert_match '0', @liquid_render.render("{{ issues.all | where: 'author.name', '', 'none' | size }}")
     end
 
   end

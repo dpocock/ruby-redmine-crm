@@ -111,7 +111,7 @@ class VotableTest < ActiveSupport::TestCase
     assert votable.vote_registered?
   end
 
-  def test_not_count_the_vote_as_being_registered_if_that_voter_has_alredy_voted_and_voted_has_not_chanded
+  def test_not_count_the_vote_as_being_registered_if_that_voter_has_already_voted_and_voted_has_not_changed
     votable.vote_by(:voter => voters(:voter), :vote => true)
     votable.vote_by(:voter => voters(:voter), :vote => 'yes')
     assert !votable.vote_registered?

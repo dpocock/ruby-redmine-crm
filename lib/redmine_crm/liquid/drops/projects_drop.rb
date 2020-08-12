@@ -67,7 +67,7 @@ module RedmineCrm
       end
 
       def issues
-        @issues ||= IssuesDrop.new @project.issues.visible
+        @issues ||= IssuesDrop.new @project.issues
       end
 
       def users

@@ -1,4 +1,14 @@
-ActiveRecord::Schema.define :version => 0 do
+ActiveRecord::Schema.define version: 0 do
+
+  create_table :drafts, force: true do |t|
+    t.string :target_type
+    t.integer :target_id
+    t.references :project
+    t.references :user
+    t.references :parent, polymorphic: true
+    t.binary :data
+    t.datetime :updated_at
+  end
 
   create_table "tags", :force => true do |t|
     t.column "name", :string

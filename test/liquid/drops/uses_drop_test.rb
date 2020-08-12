@@ -21,7 +21,7 @@ module RedmineCrm
     end
 
     def test_users_size
-      assert_equal '2', @liquid_render.render('{{ users.size }}')
+      assert_equal '3', @liquid_render.render('{{ users.size }}')
     end
 
     def test_user_name
