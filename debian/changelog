@@ -1,4 +1,4 @@
-ruby-redmine-crm (0.0.54-1) UNRELEASED; urgency=medium
+ruby-redmine-crm (0.0.54-1~bpo10+1) buster-backports; urgency=medium
 
   * Initial release (Closes: #nnnn)
 
