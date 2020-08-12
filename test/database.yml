@@ -1,21 +1,17 @@
-mysql:
-  :adapter: mysql2
-  :host: localhost
-  :username: root
-  :password: 1
-  :database: rails_plugin_test
-
-sqlite3:
-  :adapter: sqlite3
-  :database: ':memory:'
-
-postgresql:
-  :adapter: postgresql
-  :database: rails_plugin_test
-  :user: container
-  :password: 1
-  :host: localhost
-
-default_env:
+sqlite:
   adapter: sqlite3
   database: ':memory:'
+
+mysql:
+  adapter: mysql2
+  database: redmine_crm_test
+  username: root
+  password: password
+  host: 127.0.0.1
+
+postgresql:
+  adapter: postgresql
+  database: redmine_crm_test
+  user: postgres
+  password: password
+  host: 127.0.0.1

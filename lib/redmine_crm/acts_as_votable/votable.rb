@@ -85,21 +85,17 @@ module RedmineCrm
           vote = votes_for.last
         end
 
-        last_update = vote.updated_at
-
         vote.vote_flag = votable_words.meaning_of(options[:vote])
 
         # Allowing for a vote_weight to be associated with every vote. Could change with every voter object
         vote.vote_weight = (options[:vote_weight].to_i if options[:vote_weight].present?) || 1
 
-        if vote.save
-          self.vote_registered = true if last_update != vote.updated_at
-          update_cached_votes options[:vote_scope]
-          return vote
-        else
-          self.vote_registered = false
-          return false
-        end
+        return false if vote.invalid?
+
+        self.vote_registered = vote.changed?
+        vote.save!(validate: false)
+        update_cached_votes(options[:vote_scope])
+        vote
       end
 
       def unvote(args = {})

@@ -4,6 +4,8 @@
 /_yardoc/
 /coverage/
 /pkg/
+/public/
+/test/public/
 /spec/reports/
 /tmp/
 *.bundle
@@ -16,3 +18,4 @@ mkmf.log
 /Gemfile.local
 /Gemfile.local.lock
 *.gem
+/.idea/*

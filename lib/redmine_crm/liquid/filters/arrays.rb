@@ -65,15 +65,25 @@ module RedmineCrm
             end || []
           elsif operator == '>'
             input.select do |object|
-              item_property(object, property) > value
+              item_property_value = item_property(object, property) 
+              item_property_value && item_property_value > value
             end || []
           elsif operator == '<'
             input.select do |object|
-              item_property(object, property) < value
+              item_property_value = item_property(object, property) 
+              item_property_value && item_property_value < value
             end || []
           elsif operator == 'match'
             input.select do |object|
               Array(item_property(object, property)).map(&:to_s).any?{|i| i.match(value.to_s)}
+            end || []
+          elsif operator == 'any'
+            input.select do |object|
+              item_property(object, property).present?
+            end || []
+          elsif operator == 'none'
+            input.select do |object|
+              item_property(object, property).blank?
             end || []
           else
             []
@@ -90,7 +100,7 @@ module RedmineCrm
         def tagged_with(input, tags, match='all')
           return input unless input.respond_to?(:select)
           input = input.values if input.is_a?(Hash)
-          tag_list = input.is_a?(Array) ? tags.sort : tags.split(',').map(&:strip).sort
+          tag_list = tags.is_a?(Array) ? tags.sort : tags.split(',').map(&:strip).sort
           case match
           when "all"
             input.select do |object|

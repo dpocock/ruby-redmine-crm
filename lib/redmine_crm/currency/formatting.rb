@@ -4,8 +4,8 @@ module RedmineCrm
     module Formatting
       def self.included(base)
         [
-          [:thousands_separator, :delimiter, ","],
-          [:decimal_mark, :separator, "."]
+          [:thousands_separator, :delimiter, RedmineCrm::Settings::Money.thousands_delimiter],
+          [:decimal_mark, :separator, RedmineCrm::Settings::Money.decimal_separator]
         ].each do |method, name, character|
           define_i18n_method(method, name, character)
         end
@@ -115,9 +115,9 @@ module RedmineCrm
 
       def default_formatting_rules
         {
-          :decimal_mark =>".",
-          :thousands_separator => ",",
-          :subunit_to_unit => 100
+          decimal_mark: RedmineCrm::Settings::Money.decimal_separator || '.',
+          thousands_separator: RedmineCrm::Settings::Money.thousands_delimiter || ',',
+          subunit_to_unit: 100
         }
       end
 
