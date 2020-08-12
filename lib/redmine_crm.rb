@@ -1,4 +1,11 @@
+require 'active_record'
+require 'action_view'
+
 require 'redmine_crm/version'
+require 'redmine_crm/engine'
+
+require 'redmine_crm/settings'
+require 'redmine_crm/settings/money'
 
 require 'redmine_crm/acts_as_list/list'
 require 'redmine_crm/acts_as_taggable/tag'
@@ -10,21 +17,33 @@ require 'redmine_crm/acts_as_votable/rcrm_acts_as_votable'
 require 'redmine_crm/acts_as_votable/rcrm_acts_as_voter'
 require 'redmine_crm/acts_as_votable/vote'
 require 'redmine_crm/acts_as_votable/voter'
+require 'redmine_crm/acts_as_draftable/rcrm_acts_as_draftable'
+require 'redmine_crm/acts_as_draftable/draft'
 
 require 'redmine_crm/currency'
 require 'redmine_crm/helpers/tags_helper'
 require 'redmine_crm/money_helper'
+require 'redmine_crm/colors_helper'
 
 require 'liquid'
 require 'redmine_crm/liquid/filters/base'
 require 'redmine_crm/liquid/filters/arrays'
+require 'redmine_crm/liquid/filters/colors'
 require 'redmine_crm/liquid/drops/issues_drop'
 require 'redmine_crm/liquid/drops/news_drop'
 require 'redmine_crm/liquid/drops/projects_drop'
 require 'redmine_crm/liquid/drops/users_drop'
+require 'redmine_crm/liquid/drops/time_entries_drop'
 
 require 'redmine_crm/helpers/external_assets_helper'
+require 'redmine_crm/helpers/form_tag_helper'
 require 'redmine_crm/assets_manager'
+
+require 'redmine_crm/compatibility/application_controller_patch'
+
+module RedmineCrm
+  GEM_NAME = 'redmine_crm'.freeze
+end
 
 if defined?(ActiveRecord::Base)
   ActiveRecord::Base.send :include, RedmineCrm::ActsAsList::List
@@ -36,6 +55,7 @@ RedmineCrm::AssetsManager.install_assets
 
 if defined?(ActionView::Base)
   ActionView::Base.send :include, RedmineCrm::ExternalAssetsHelper
+  ActionView::Base.send :include, RedmineCrm::FormTagHelper
 end
 
 def requires_redmine_crm(arg)

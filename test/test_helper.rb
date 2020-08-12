@@ -1,47 +1,20 @@
+require 'rails/all'
+require 'redmine_crm'
 require 'minitest/autorun'
-require 'byebug'
-# require 'test/unit'
-
-begin
-  require File.dirname(__FILE__) + '/../../../../config/environment'
-rescue LoadError
-  require 'rubygems'
-  gem 'activerecord'
-  gem 'actionpack'
-  require 'active_record'
-end
-require "redmine_crm"
-require "active_record/fixtures"
-
-require File.dirname(__FILE__) + '/../lib/redmine_crm/acts_as_taggable/tag'
-require File.dirname(__FILE__) + '/../lib/redmine_crm/acts_as_taggable/tag_list'
-require File.dirname(__FILE__) + '/../lib/redmine_crm/acts_as_taggable/tagging'
-require File.dirname(__FILE__) + '/../lib/redmine_crm/acts_as_taggable/rcrm_acts_as_taggable'
-require File.dirname(__FILE__) + '/../lib/redmine_crm/helpers/tags_helper'
-require File.dirname(__FILE__) + '/../lib/redmine_crm/acts_as_votable/rcrm_acts_as_votable'
-require File.dirname(__FILE__) + '/../lib/redmine_crm/acts_as_votable/rcrm_acts_as_voter'
-
-# require_dependency File.dirname(__FILE__) + '/../lib/redmine_crm/tags_helper'
 
 ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + '/debug.log')
-ActiveRecord::Base.configurations = YAML::load(IO.read(File.dirname(__FILE__) + '/database.yml'))
-ActiveRecord::Base.establish_connection(ActiveRecord::Base.configurations[ENV['DB'] || 'sqlite3'])
+ActiveRecord::Base.configurations = YAML.load_file(File.dirname(__FILE__) + '/database.yml')
+ActiveRecord::Base.establish_connection(ENV['DB'].try(:to_sym) || :sqlite)
 
 load(File.dirname(__FILE__) + '/schema.rb')
-load(File.dirname(__FILE__) + '/fixtures/user.rb')
-load(File.dirname(__FILE__) + '/fixtures/issue.rb')
-load(File.dirname(__FILE__) + '/fixtures/vote_classes.rb')
-load(File.dirname(__FILE__) + '/fixtures/news.rb')
-load(File.dirname(__FILE__) + '/fixtures/project.rb')
-
-# Dir["/fixtures/*.rb"].each{|file| load file}
+Dir.glob(File.expand_path('../models/*.rb', __FILE__)).each { |f| require f }
 
 class ActiveSupport::TestCase #:nodoc:
   include ActiveRecord::TestFixtures
 
   self.fixture_path = File.dirname(__FILE__) + '/fixtures/'
 
-  self.use_transactional_tests = true
+  self.use_transactional_tests = true if RUBY_VERSION > '1.9.3'
   self.use_instantiated_fixtures = false
   set_fixture_class :tags => RedmineCrm::ActsAsTaggable::Tag
   set_fixture_class :taggings => RedmineCrm::ActsAsTaggable::Tagging
@@ -74,31 +47,6 @@ class ActiveSupport::TestCase #:nodoc:
     unless expected_values.empty?
       assert false, "The following tag counts were not present: #{expected_values.inspect}"
     end
-  end
-
-  # def assert_queries(num = 1)
-  #   $query_count = 0
-  #   yield
-  # ensure
-  #   assert_equal num, $query_count, "#{$query_count} instead of #{num} queries were executed."
-  # end
-
-  # def assert_queries(num = 1, options = {})
-  #   ignore_none = options.fetch(:ignore_none) { num == :any }
-  #   SQLCounter.clear_log
-  #   yield
-  # ensure
-  #   the_log = ignore_none ? SQLCounter.log_all : SQLCounter.log
-  #   if num == :any
-  #     assert_operator the_log.size, :>=, 1, "1 or more queries expected, but none were executed."
-  #   else
-  #     mesg = "#{the_log.size} instead of #{num} queries were executed.#{the_log.size == 0 ? '' : "\nQueries:\n#{the_log.join("\n")}"}"
-  #     assert_equal num, the_log.size, mesg
-  #   end
-  # end
-
-  def assert_no_queries(&block)
-    assert_queries(0, &block)
   end
 
   # From Rails trunk

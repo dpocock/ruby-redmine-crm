@@ -35,7 +35,7 @@ module RedmineCrm
     end
 
     class UserDrop < ::Liquid::Drop
-      delegate :id, :name, :firstname, :lastname, :mail, :active?, :admin?, :logged?, :language, :to => :@user
+      delegate :id, :name, :firstname, :lastname, :mail, :active?, :admin?, :logged?, :language, :to => :@user, allow_nil: true
 
       def initialize(user)
         @user = user
@@ -43,10 +43,6 @@ module RedmineCrm
 
       def avatar
         ApplicationController.helpers.avatar(@user)
-      end
-
-      def name
-        @user.name
       end
 
       def permissions

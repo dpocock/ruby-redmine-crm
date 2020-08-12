@@ -36,7 +36,7 @@ module RedmineCrm
 
         def md5(input)
           Digest::MD5.hexdigest(input) unless input.blank?
-        end        
+        end
 
         # example:
         #   {{ "http:://www.example.com?key=hello world" | encode }}
@@ -87,8 +87,8 @@ module RedmineCrm
           to_number(input).floor.to_i
         end
 
-        def currency(input, currency_code = 'USD')
-          price_to_currency(input, currency_code, :converted => false)
+        def currency(input, currency_code = nil)
+          price_to_currency(input, currency_code || container_currency, :converted => false)
         end
 
         def call_method(input, method_name)
@@ -98,8 +98,15 @@ module RedmineCrm
         end
 
         def custom_field(input, field_name)
-          if input.respond_to?(:custom_fields)
-            input.custom_fields[field_name]
+          if input.respond_to?(:custom_field_values)
+            custom_value = input.custom_field_values.detect { |cfv| cfv.custom_field.name == field_name }
+            custom_value.custom_field.format.formatted_custom_value(nil, custom_value)
+          end
+        end
+
+        def custom_fields(input)
+          if input.respond_to?(:custom_field_values)
+            input.custom_field_values.map { |cfv| cfv.custom_field.name }
           end
         end
 
@@ -112,6 +119,30 @@ module RedmineCrm
             end
             AttachmentDrop.new attachment if attachment
           end
+        end
+
+        def multi_line(input)
+          input.to_s.gsub("\n", '<br/>').html_safe
+        end
+
+        def concat(input, *args)
+          result = input.to_s
+          args.flatten.each { |a| result << a.to_s }
+          result
+        end
+
+        # right justify and padd a string
+        def rjust(input, integer, padstr = '')
+          input.to_s.rjust(integer, padstr)
+        end
+
+        # left justify and padd a string
+        def ljust(input, integer, padstr = '')
+          input.to_s.ljust(integer, padstr)
+        end
+
+        def textile(input)
+          ::RedCloth3.new(input).to_html
         end
 
         protected
@@ -172,7 +203,9 @@ module RedmineCrm
 
         def item_property(item, property)
           if item.respond_to?(:to_liquid)
-            item.to_liquid[property.to_s]
+            property.to_s.split(".").reduce(item.to_liquid) do |subvalue, attribute|
+              subvalue[attribute]
+            end
           elsif item.respond_to?(:data)
             item.data[property.to_s]
           else
@@ -200,6 +233,14 @@ module RedmineCrm
               item
             end
           end
+        end
+
+        def container
+          @container ||= @context.registers[:container]
+        end
+
+        def container_currency
+          container.currency if container.respond_to?(:currency)
         end
       end
       ::Liquid::Template.register_filter(RedmineCrm::Liquid::Filters::Base)

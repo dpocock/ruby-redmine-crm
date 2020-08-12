@@ -1,9 +1,9 @@
 module RedmineCrm
   class AssetsManager
     def self.install_assets
-      return unless Gem.loaded_specs['redmine_crm']
-      source = File.join(Gem.loaded_specs['redmine_crm'].full_gem_path, 'vendor', 'assets')
-      destination = File.join(Dir.pwd, 'public', 'plugin_assets', 'redmine_crm')
+      return unless Gem.loaded_specs[GEM_NAME]
+      source = File.join(Gem.loaded_specs[GEM_NAME].full_gem_path, 'vendor', 'assets')
+      destination = File.join(Dir.pwd, 'public', 'plugin_assets', GEM_NAME)
       return unless File.directory?(source)
 
       source_files = Dir[source + '/**/*']

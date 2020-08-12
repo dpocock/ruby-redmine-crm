@@ -111,6 +111,13 @@ module RedmineCrm
           group_fields << ", #{Tag.table_name}.created_at" if Tag.respond_to?(:created_at)
           group_fields << ", #{Tag.table_name}.updated_at" if Tag.respond_to?(:updated_at)
 
+          if base_class.respond_to?(:visible_condition)
+            visible_condition = base_class.visible_condition(User.current)
+            if visible_condition.include?('project_id') && join.all? { |jn| jn.exclude?('JOIN projects') }
+              join << "JOIN #{Project.table_name} ON #{Project.table_name}.id = #{table_name}.project_id"
+            end
+            scope = scope.where(visible_condition)
+          end
           scope = scope.joins(join.join(' '))
           scope = scope.select("#{Tag.table_name}.*, COUNT(DISTINCT #{Tagging.table_name}.taggable_id) AS count")
           scope = scope.group("#{Tag.table_name}.id, #{Tag.table_name}.name #{group_fields}")
@@ -253,7 +260,7 @@ module RedmineCrm
           column_names.include?(cached_tag_list_column_name)
         end
 
-       private
+        private
 
         def quote_string_value(object)
           connection.quote(object)
