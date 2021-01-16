@@ -1,10 +1,10 @@
-ruby-redmine-crm (0.0.54-2) UNRELEASED; urgency=medium
+ruby-redmine-crm (0.0.54-2) unstable; urgency=medium
 
   * Add patch for ruby-liquid > 2.6.
 
  -- Daniel Pocock <daniel@pocock.pro>  Sat, 16 Jan 2021 22:02:33 +0100
 
-ruby-redmine-crm (0.0.54-1) UNRELEASED; urgency=medium
+ruby-redmine-crm (0.0.54-1) unstable; urgency=medium
 
   * Initial release (Closes: #nnnn)
 
