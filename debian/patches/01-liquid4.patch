@@ -1,0 +1,40 @@
+Binary files a/checksums.yaml.gz and b/checksums.yaml.gz differ
+Only in b/config/locales: de.yml
+Binary files a/data.tar.gz and b/data.tar.gz differ
+diff -ur a/lib/redmine_crm/acts_as_taggable/rcrm_acts_as_taggable.rb b/lib/redmine_crm/acts_as_taggable/rcrm_acts_as_taggable.rb
+--- a/lib/redmine_crm/acts_as_taggable/rcrm_acts_as_taggable.rb	2020-08-10 08:43:44.000000000 +0200
++++ b/lib/redmine_crm/acts_as_taggable/rcrm_acts_as_taggable.rb	2021-01-15 15:22:11.000000000 +0100
+@@ -90,7 +90,7 @@
+         #Return all avalible tags for a project or global
+         #Example: Question.available_tags(:project => @project_id )
+         def available_tags(options = {})
+-          project = options[:project]
++          projects = [[options[:project]], options[:projects]].flatten.compact
+           limit = options[:limit].to_i.zero? ? 30 : options[:limit].to_i
+           scope = Tag.where({})
+           class_name = quote_string_value(base_class.name)
+@@ -98,9 +98,9 @@
+           join << "JOIN #{Tagging.table_name} ON #{Tagging.table_name}.tag_id = #{Tag.table_name}.id "
+           join << "JOIN #{table_name} ON #{table_name}.id = #{Tagging.table_name}.taggable_id
+             AND #{Tagging.table_name}.taggable_type = #{class_name} "
+-          if attribute_names.include?('project_id') && project
++          if attribute_names.include?('project_id') && projects.any?
+             join << "JOIN #{Project.table_name} ON #{Project.table_name}.id = #{table_name}.project_id"
+-            scope = scope.where("#{table_name}.project_id = ?", project.id)
++            scope = scope.where("#{table_name}.project_id IN (%s)", projects.map(&:id).join(','))
+           end
+ 
+           if options[:name_like]
+Binary files a/metadata.gz and b/metadata.gz differ
+diff -ur a/redmine_crm.gemspec b/redmine_crm.gemspec
+--- a/redmine_crm.gemspec	2020-08-10 08:43:44.000000000 +0200
++++ b/redmine_crm.gemspec	2021-01-15 15:22:11.000000000 +0100
+@@ -19,7 +19,7 @@
+   spec.require_paths = ["lib"]
+ 
+   spec.add_runtime_dependency 'rails'
+-  spec.add_runtime_dependency 'liquid', '< 2.6.4'
++  spec.add_runtime_dependency 'liquid', '< 5.0'
+   spec.add_runtime_dependency 'rubyzip'
+ 
+   spec.add_development_dependency 'sqlite3'
