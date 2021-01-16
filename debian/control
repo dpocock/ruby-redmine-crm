@@ -5,7 +5,7 @@ Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.al
 Build-Depends: debhelper (>= 11~),
                gem2deb,
                rake,
-               ruby-liquid (<< 2.6.4),
+               ruby-liquid,
                ruby-rails,
                ruby-zip
 Standards-Version: 4.3.0
@@ -20,7 +20,7 @@ Package: ruby-redmine-crm
 Architecture: all
 XB-Ruby-Versions: ${ruby:Versions}
 Depends: ruby | ruby-interpreter,
-         ruby-liquid (<< 2.6.4),
+         ruby-liquid,
          ruby-rails,
          ruby-zip,
          ${misc:Depends},
