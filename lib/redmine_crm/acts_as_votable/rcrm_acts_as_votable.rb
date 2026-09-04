@@ -58,7 +58,7 @@ module RedmineCrm
 
         end
 
-        if self.parent::VERSION::MAJOR < 4
+        if ::ActiveRecord::VERSION::MAJOR < 4
           create_index votes_name_table, [:votable_id, :votable_type, :vote_ip]
           create_index votes_name_table, [:voter_id, :voter_type, :vote_ip]
         end

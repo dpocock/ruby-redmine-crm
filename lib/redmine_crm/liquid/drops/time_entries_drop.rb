@@ -49,7 +49,7 @@ module RedmineCrm
       end
 
       def issue
-        @issue ||= IssueDrop.new(@time_entry.issue)
+        @issue ||= IssueDrop.new(@time_entry.issue) unless @time_entry.issue.blank?
       end
 
       def activity

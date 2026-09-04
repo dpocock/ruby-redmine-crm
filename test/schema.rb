@@ -1,5 +1,20 @@
 ActiveRecord::Schema.define version: 0 do
 
+  create_table :attachments, force: true do |t|
+    t.integer :container_id
+    t.string :container_type, limit: 30
+    t.string :filename, default: "", null: false
+    t.string :disk_filename, default: "", null: false
+    t.bigint :filesize, default: 0, null: false
+    t.string :content_type, default: ""
+    t.string :digest, limit: 64, default: "", null: false
+    t.integer :downloads, default: 0, null: false
+    t.integer :author_id, default: 0, null: false
+    t.timestamp :created_on
+    t.string :description
+    t.string :disk_directory
+  end
+
   create_table :drafts, force: true do |t|
     t.string :target_type
     t.integer :target_id
@@ -21,10 +36,16 @@ ActiveRecord::Schema.define version: 0 do
     t.column "created_at", :datetime
   end
 
-
   create_table "users", :force => true do |t|
     t.column "name", :string
     t.column "language", :string
+  end
+
+  create_table "issue_relations", :force => true do |t|
+    t.column "issue_from_id", :integer
+    t.column "issue_to_id", :integer
+    t.column "relation_type", :string
+    t.column "delay", :integer
   end
 
   create_table "issues", :force => true do |t|

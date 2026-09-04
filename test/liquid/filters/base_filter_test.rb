@@ -52,12 +52,16 @@ module RedmineCrm
       assert_equal '25', @liquid_render.render("{{24.11 | ceil }}")
     end
 
+    def test_big_decimal_filter_patch
+      assert_equal '2.8571', @liquid_render.render("{{ 20 | divided_by: 7.0 | round: 4 }}")
+    end
+
     def test_floor_filter
       assert_equal '24', @liquid_render.render("{{24.99 | floor }}")
     end
 
     def test_currency_filter
-      assert_equal '99,99 RUB', @liquid_render.render("{{99.99 | currency: 'RUB' }}")
+      assert_equal '99,99 ₽', @liquid_render.render("{{99.99 | currency: 'RUB' }}")
     end
   end
 end

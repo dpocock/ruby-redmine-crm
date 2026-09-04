@@ -58,7 +58,7 @@ module RedmineCrm
 
         map do |name|
           name.include?(delimiter) ? "\"#{name}\"" : name
-        end.join(delimiter.ends_with?(" ") ? delimiter : "#{delimiter} ")
+        end.join(delimiter[-1] == (' ') ? delimiter : "#{delimiter} ")
       end
 
      private

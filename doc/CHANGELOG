@@ -1,9 +1,54 @@
 == Redmine CRM gem changelog
 
 Redmine crm gem - general functions for plugins (tags, vote, viewing, currency)
-Copyright (C) 2011-2020 RedmineUP
+Copyright (C) 2011-2023 RedmineUP
 https://www.redmineup.com/
+
+== 2023-12-26 v0.0.63
+
+* Compatibility fixes with attachment routes 
+
+== 2023-11-15 v0.0.62
+
+* Redmine 5.1 compatibility fixes
+
+== 2023-09-27 v0.0.61
+
+* Reverted time picker calendar
+* Added helper methods for time format
+
+== 2023-09-20 v0.0.60
+
+* Fixed SQL injection 
+* Added calendar with date time picker
+
+== 2023-01-16 v0.0.59
+
+* Fixed attachments constraint 
+* Added Spanish locale (Juan José Taguas Navarro)
  
+== 2022-09-26 v0.0.58
+
+* Added closed? method to Issue Drop
+* Added blank issue for Time Entry
+* Added helpdesk_ticket method for Issue Drop
+
+== 2022-02-14 v0.0.57
+
+* Fixed BigDecimal liquid bug for ruby > 2.6 
+
+== 2022-02-14 v0.0.56
+
+* Added rcrm_acts_as_priceable 
+* Added IssueRealtions drops
+
+== 2021-06-08 v0.0.55
+
+* Added Attachment Liquid drop
+* Added section to Checklist Liquid drop
+* Added Czech locale
+* Added German locale
+
 == 2020-08-10 v0.0.54
 
 * Fixed new JQuery select2 bug
