@@ -183,7 +183,7 @@ module RedmineCrm
           if viewer && !viewer.id.nil? && !viewer.anonymous?
             return viewings.where("viewer_id = '#{viewer.id}'").any?
           else
-            return viewings.where("ip = '#{ip}'").any?
+            return viewings.where("ip = :ip", ip: ip).any?
           end
         end
 

@@ -6,14 +6,15 @@ module RedmineCrm
       end
 
       def before_method(id)
-        issue = @issues.where(:id => id).first || Issue.new
+        issue = @issues.where(id: id).first || Issue.new
         IssueDrop.new issue
       end
 
       def all
-        @all ||= @issues.map do |issue|
-          IssueDrop.new issue
-        end
+        @all ||=
+          @issues.map do |issue|
+            IssueDrop.new issue
+          end
       end
 
       def visible
@@ -34,9 +35,8 @@ module RedmineCrm
 
       delegate :id,
                :subject,
-               :description,
                :visible?,
-               :open?,
+               :closed?,
                :start_date,
                :due_date,
                :overdue?,
@@ -49,14 +49,14 @@ module RedmineCrm
                :closed_on,
                :updated_on,
                :created_on,
-               :to => :@issue
+               to: :@issue
 
       def initialize(issue)
         @issue = issue
       end
 
       def link
-        link_to @issue.subject, self.url
+        link_to @issue.subject, url
       end
 
       def url
@@ -96,23 +96,35 @@ module RedmineCrm
       end
 
       def parent
-        @parent ||= IssueDrop.new @issue.parent if @issue.parent 
+        @parent ||= IssueDrop.new @issue.parent if @issue.parent
       end
 
       def project
-        @project ||= ProjectDrop.new @issue.project if @issue.project 
+        @project ||= ProjectDrop.new @issue.project if @issue.project
+      end
+
+      def description
+        @description ||= replace_images_urls(@issue.description)
       end
 
       def subtasks
-        @subtasks ||= IssuesDrop.new @issue.children 
+        @subtasks ||= IssuesDrop.new @issue.children
+      end
+
+      def relations_from
+        @relations_from ||= IssueRelationsDrop.new(@issue.relations_from.select { |r| r.other_issue(@issue) && r.other_issue(@issue).visible? })
+      end
+
+      def relations_to
+        @relations_to ||= IssueRelationsDrop.new(@issue.relations_to.select { |r| r.other_issue(@issue) && r.other_issue(@issue).visible? })
       end
 
       def notes
-        @notes ||= @issue.journals.where("#{Journal.table_name}.notes IS NOT ?", nil).order(:created_on).map(&:notes)
+        @notes ||= @issue.journals.where.not(notes: [nil, '']).order(:created_on).map(&:notes).map { |note| replace_images_urls(note) }
       end
 
       def journals
-        @journals ||= JournalsDrop.new @issue.journals.where("#{Journal.table_name}.notes IS NOT ?", nil)
+        @journals ||= JournalsDrop.new(@issue.journals.where.not(notes: nil).find_each { |journal| journal.notes = replace_images_urls(journal.notes) })
       end
 
       def tags
@@ -126,19 +138,39 @@ module RedmineCrm
       def color
         @issue.respond_to?(:color) && @issue.color
       end
-      
+
       def day_in_state
         @issue.respond_to?(:day_in_state) && @issue.day_in_state
       end
 
       def checklists
-        @issue.respond_to?(:checklists) && @issue.checklists.map{|item| {"id_done" => item.is_done, "subject" => item.subject}}
+        @issue.respond_to?(:checklists) && @issue.checklists.map do |item|
+          { 'id_done' => item.is_done, 'subject' => item.subject, 'is_section' => item.is_section }
+        end
+      end
+
+      def helpdesk_ticket
+        return nil unless defined?(::HelpdeskTicketDrop)
+
+        @helpdesk_ticket ||= HelpdeskTicketDrop.new(@issue)
       end
 
       def custom_field_values
         @issue.custom_field_values
-      end      
+      end
 
+      private
+
+      def replace_images_urls(text)
+        text.gsub(/\!.*\!/) do |i_name|
+          i_name = i_name.delete('!')
+          i_name_css = i_name.scan(/^\{.*\}/).first.to_s
+          attachment = @issue.attachments.find_by(filename: i_name.gsub(i_name_css, ''))
+          image = AttachmentDrop.new attachment if attachment
+          attach_url = image.try(:url)
+          attach_url ? "!#{i_name_css}#{attach_url}!" : i_name
+        end
+      end
     end
 
     class JournalsDrop < ::Liquid::Drop
@@ -147,9 +179,10 @@ module RedmineCrm
       end
 
       def all
-        @all ||= @journals.map do |journal|
-          JournalDrop.new journal
-        end
+        @all ||=
+          @journals.map do |journal|
+            JournalDrop.new journal
+          end
       end
 
       def visible
@@ -166,12 +199,7 @@ module RedmineCrm
     end
 
     class JournalDrop < ::Liquid::Drop
-      delegate :id,
-               :notes,
-               :created_on,
-               :private_notes,
-               :to => :@journal, 
-               allow_nil: true
+      delegate :id, :notes, :created_on, :private_notes, to: :@journal, allow_nil: true
 
       def initialize(journal)
         @journal = journal
@@ -182,10 +210,8 @@ module RedmineCrm
       end
 
       def issue
-        @issue ||= IssueDrop.new @journal.issue if @journal.issue 
+        @issue ||= IssueDrop.new @journal.issue if @journal.issue
       end
-
     end
-
   end
 end

@@ -1813,7 +1813,7 @@
     "priority": 100,
     "iso_code": "RUB",
     "name": "Russian Ruble",
-    "symbol": "RUB",
+    "symbol": "₽",
     "alternate_symbols": ["руб.", "р."],
     "subunit": "Kopeck",
     "subunit_to_unit": 100,

@@ -233,9 +233,9 @@ module RedmineCrm
         end
         self.record_timestamps = false
         if (::ActiveRecord::VERSION::MAJOR == 3) && (::ActiveRecord::VERSION::MINOR != 0)
-          self.update_attributes(updates, :without_protection => true) if !updates.empty?
+          self.assign_attributes(updates, :without_protection => true) && self.save if !updates.empty?
         else
-          self.update_attributes(updates) if !updates.empty?
+          self.assign_attributes(updates) && self.save if !updates.empty?
         end
       end
 
