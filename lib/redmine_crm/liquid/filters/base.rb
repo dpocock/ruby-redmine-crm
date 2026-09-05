@@ -100,7 +100,7 @@ module RedmineCrm
         def custom_field(input, field_name)
           if input.respond_to?(:custom_field_values)
             custom_value = input.custom_field_values.detect { |cfv| cfv.custom_field.name == field_name }
-            custom_value.custom_field.format.formatted_custom_value(nil, custom_value)
+            custom_value.custom_field.format.formatted_custom_value(nil, custom_value) if custom_value
           end
         end
 

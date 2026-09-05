@@ -29,6 +29,10 @@ module RedmineCrm
     def test_issue_delegated
       assert_equal [@issue.id, @issue.subject, @issue.description].join('|'),
                    @liquid_render.render('{{ issue.id }}|{{ issue.subject }}|{{ issue.description }}')
+
+      assert_not_equal @issue.subject, @liquid_render.render('{% if issue.closed? %}{{issue.subject}}{% endif %}')
+      @issue.closed = true
+      assert_equal @issue.subject, @liquid_render.render('{% if issue.closed? %}{{issue.subject}}{% endif %}')
     end
   end
 end

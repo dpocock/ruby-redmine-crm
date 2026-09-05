@@ -15,5 +15,6 @@ module RedmineCrm
       @chartjs_tag_included = true
       javascript_include_tag('Chart.bundle.min', plugin: GEM_NAME)
     end
+
   end
 end

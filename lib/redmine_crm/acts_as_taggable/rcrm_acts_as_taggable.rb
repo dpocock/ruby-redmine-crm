@@ -90,7 +90,7 @@ module RedmineCrm
         #Return all avalible tags for a project or global
         #Example: Question.available_tags(:project => @project_id )
         def available_tags(options = {})
-          project = options[:project]
+          projects = [[options[:project]], options[:projects]].flatten.compact
           limit = options[:limit].to_i.zero? ? 30 : options[:limit].to_i
           scope = Tag.where({})
           class_name = quote_string_value(base_class.name)
@@ -98,9 +98,9 @@ module RedmineCrm
           join << "JOIN #{Tagging.table_name} ON #{Tagging.table_name}.tag_id = #{Tag.table_name}.id "
           join << "JOIN #{table_name} ON #{table_name}.id = #{Tagging.table_name}.taggable_id
             AND #{Tagging.table_name}.taggable_type = #{class_name} "
-          if attribute_names.include?('project_id') && project
+          if attribute_names.include?('project_id') && projects.any?
             join << "JOIN #{Project.table_name} ON #{Project.table_name}.id = #{table_name}.project_id"
-            scope = scope.where("#{table_name}.project_id = ?", project.id)
+            scope = scope.where("#{table_name}.project_id IN (%s)", projects.map(&:id).join(','))
           end
 
           if options[:name_like]

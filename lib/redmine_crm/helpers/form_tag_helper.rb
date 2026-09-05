@@ -72,5 +72,17 @@ module RedmineCrm
     def transform_to_select2(type, options = {})
       javascript_tag("setSelect2Filter('#{type}', #{options.to_json});") unless type.empty?
     end
+
+    def format_datetime(time)
+      formated_time = format_time(time, false)
+      formated_date = ::I18n.l(time.to_date, format: '%Y-%m-%d')
+      "#{formated_date} #{formated_time}"
+    end
+
+    def format_datetime_date(time)
+      formated_date = ::I18n.l(time.to_date, format: '%Y-%m-%d')
+      "#{formated_date}"
+    end    
+
   end
 end

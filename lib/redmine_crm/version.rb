@@ -1,3 +1,3 @@
 module RedmineCrm
-  VERSION = '0.0.54'
+  VERSION = '0.0.63'
 end
