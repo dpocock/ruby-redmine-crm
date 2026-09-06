@@ -1,6 +1,3 @@
-Binary files a/checksums.yaml.gz and b/checksums.yaml.gz differ
-Only in b/config/locales: de.yml
-Binary files a/data.tar.gz and b/data.tar.gz differ
 diff -ur a/lib/redmine_crm/acts_as_taggable/rcrm_acts_as_taggable.rb b/lib/redmine_crm/acts_as_taggable/rcrm_acts_as_taggable.rb
 --- a/lib/redmine_crm/acts_as_taggable/rcrm_acts_as_taggable.rb	2020-08-10 08:43:44.000000000 +0200
 +++ b/lib/redmine_crm/acts_as_taggable/rcrm_acts_as_taggable.rb	2021-01-15 15:22:11.000000000 +0100
@@ -25,7 +22,6 @@ diff -ur a/lib/redmine_crm/acts_as_taggable/rcrm_acts_as_taggable.rb b/lib/redmi
            end
  
            if options[:name_like]
-Binary files a/metadata.gz and b/metadata.gz differ
 diff -ur a/redmine_crm.gemspec b/redmine_crm.gemspec
 --- a/redmine_crm.gemspec	2020-08-10 08:43:44.000000000 +0200
 +++ b/redmine_crm.gemspec	2021-01-15 15:22:11.000000000 +0100
