@@ -1,12 +1,12 @@
 diff -ur a/redmine_crm.gemspec b/redmine_crm.gemspec
---- a/redmine_crm.gemspec	2020-08-10 08:43:44.000000000 +0200
-+++ b/redmine_crm.gemspec	2021-01-15 15:22:11.000000000 +0100
-@@ -19,7 +19,7 @@
-   spec.require_paths = ["lib"]
+--- a/redmine_crm.gemspec
++++ b/redmine_crm.gemspec
+@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
+   spec.required_ruby_version = ">= 2.0.0"
  
    spec.add_runtime_dependency 'rails'
 -  spec.add_runtime_dependency 'liquid', '< 2.6.4'
-+  spec.add_runtime_dependency 'liquid', '< 5.0'
++  spec.add_runtime_dependency 'liquid'
    spec.add_runtime_dependency 'rubyzip'
  
    spec.add_development_dependency 'sqlite3'
