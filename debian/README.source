@@ -1,0 +1,24 @@
+
+This package is now obsolete.
+
+It is superceded by the ruby-redmineup package, based on the
+RedmineUP library GEM:
+
+  https://rubygems.org/gems/redmineup
+
+The packaging for ruby-redmineup is stored in Git:
+
+  https://github.com/dpocock/ruby-redmineup
+
+RedmineUP plugins using the new RedmineUP library GEM can't be
+installed at the same time as plugins using the legacy redmine_crm
+library GEM.
+
+  https://rubygems.org/gems/redmine_crm
+
+It is important to avoid confusion between the name of this library,
+redmine_crm and the similarly named redmine_crm_contacts plugin from
+the same vendor.
+
+  https://www.redmineup.com/pages/help/crm/contacts-and-companies
+
