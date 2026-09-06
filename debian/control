@@ -8,7 +8,7 @@ Build-Depends: debhelper-compat (= 13),
                rake,
                ruby-liquid,
                ruby-rails,
-               ruby-rubyzip
+               ruby-zip
 Standards-Version: 4.6.1
 Vcs-Git: https://github.com/dpocock/ruby-redmine-crm
 Vcs-Browser: https://github.com/dpocock/ruby-redmine-crm
